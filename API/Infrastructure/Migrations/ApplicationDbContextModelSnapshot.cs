@@ -19,7 +19,7 @@ namespace API.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("API.Models.ChargeStation", b =>
+            modelBuilder.Entity("API.Models.ChargeStationModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace API.Migrations
                     b.ToTable("ChargeStations");
                 });
 
-            modelBuilder.Entity("API.Models.Connector", b =>
+            modelBuilder.Entity("API.Models.ConnectorModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace API.Migrations
                     b.ToTable("Connectors");
                 });
 
-            modelBuilder.Entity("API.Models.Group", b =>
+            modelBuilder.Entity("API.Models.GroupModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,30 +75,30 @@ namespace API.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("API.Models.ChargeStation", b =>
+            modelBuilder.Entity("API.Models.ChargeStationModel", b =>
                 {
-                    b.HasOne("API.Models.Group", null)
+                    b.HasOne("API.Models.GroupModel", null)
                         .WithMany("ChargeStations")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Models.Connector", b =>
+            modelBuilder.Entity("API.Models.ConnectorModel", b =>
                 {
-                    b.HasOne("API.Models.ChargeStation", null)
+                    b.HasOne("API.Models.ChargeStationModel", null)
                         .WithMany("Connectors")
                         .HasForeignKey("ChargeStationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Models.ChargeStation", b =>
+            modelBuilder.Entity("API.Models.ChargeStationModel", b =>
                 {
                     b.Navigation("Connectors");
                 });
 
-            modelBuilder.Entity("API.Models.Group", b =>
+            modelBuilder.Entity("API.Models.GroupModel", b =>
                 {
                     b.Navigation("ChargeStations");
                 });

@@ -1,4 +1,4 @@
-﻿using API.Models;
+﻿using API.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GreenFlux.API.DbContexts

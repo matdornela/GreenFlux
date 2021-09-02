@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Models
+namespace API.Infrastructure.Models
 {
     public class Group
     {

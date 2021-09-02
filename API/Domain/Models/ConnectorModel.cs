@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace API.Models
+namespace API.Domain.Models
 {
-    public class Connector
+    public class ConnectorModel
     {
         public int Id { get; set; }
         public decimal MaxCurrent { get; set; }

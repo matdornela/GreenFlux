@@ -1,5 +1,5 @@
 ﻿using API.Domain.Models;
-using API.Domain.Repositories;
+using API.Domain.Repository;
 using AutoMapper;
 using GreenFlux.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace API.Infrastructure.Repositories
+namespace API.Infrastructure.Repository
 {
     public class ConnectorRepository : Repository<ConnectorModel>, IConnectorRepository
     {
@@ -23,7 +23,7 @@ namespace API.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<List<ConnectorModel>> GetAllConnectorsByChargeStationId(Guid chargeStationId)
+        public async Task<List<ConnectorModel>> GetConnectorsByChargeStation(Guid chargeStationId)
         {
             var data = await Context.ChargeStations
                  .Where(a => a.Id == chargeStationId)

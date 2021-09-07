@@ -1,6 +1,7 @@
 using System;
 using API.Infrastructure.AutoMapper;
-using AutoMapper;
+using API.Infrastructure.Configuration;
+using Autofac;
 using GreenFlux.API.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,11 +10,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Linq;
+using AutoMapper;
 
 namespace API
 {
     public class Startup
     {
+        public IContainer ApplicationContainer { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,9 +38,17 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
-            services.AddAutoMapper(typeof(Startup));
+            IMapper mapper = MappingConfiguration.RegisterMaps().CreateMapper();
+            services.AddSingleton(mapper);
 
-;        }
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //services.AddAutoMapper(AutoMapperUtil.GetAutoMapperProfilesFromAllAssemblies().ToArray());
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new AutofacModule());
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,6 +70,8 @@ namespace API
             {
                 endpoints.MapControllers();
             });
+
+            //MappingConfiguration.RegisterMaps();
         }
     }
 }

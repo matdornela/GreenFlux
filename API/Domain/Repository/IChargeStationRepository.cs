@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace API.Domain.Repositories
+namespace API.Domain.Repository
 {
     public interface IChargeStationRepository : IRepository<ChargeStationModel>
     {

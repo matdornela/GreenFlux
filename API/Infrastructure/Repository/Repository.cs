@@ -1,11 +1,11 @@
-﻿using System;
+﻿using API.Domain.Repository;
+using GreenFlux.API.DbContexts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Domain.Repositories;
-using GreenFlux.API.DbContexts;
 
-namespace API.Infrastructure.Repositories
+namespace API.Infrastructure.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {

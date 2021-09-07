@@ -1,5 +1,5 @@
 ﻿using API.Domain.Models;
-using API.Domain.Repositories;
+using API.Domain.Repository;
 using AutoMapper;
 using GreenFlux.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace API.Infrastructure.Repositories
+namespace API.Infrastructure.Repository
 {
     public class GroupRepository : Repository<GroupModel>, IGroupRepository
     {
@@ -21,7 +21,7 @@ namespace API.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<List<GroupModel>> GetAllWithGroupsAsync()
+        public async Task<List<GroupModel>> GetGroups()
         {
             var data = await Context.Groups
                 .Include(a => a.ChargeStations)
@@ -29,7 +29,7 @@ namespace API.Infrastructure.Repositories
             return _mapper.Map<List<GroupModel>>(data);
         }
 
-        public async Task<GroupModel> GetWithGroupsByIdAsync(Guid id)
+        public async Task<GroupModel> GetGroupById(Guid id)
         {
             var data = await Context.Groups
                 .Include(a => a.ChargeStations)

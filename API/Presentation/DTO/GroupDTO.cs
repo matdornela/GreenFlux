@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Domain.Models
+namespace API.Presentation.DTO
 {
-    public class GroupModel
+    public class GroupDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public decimal Capacity { get; set; }
-        public ICollection<ChargeStationModel> ChargeStations { get; set; }
+        public ICollection<ChargeStationDTO> ChargeStations { get; set; }
     }
 }

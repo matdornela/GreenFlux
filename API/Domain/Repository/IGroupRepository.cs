@@ -1,13 +1,20 @@
-﻿using System;
+﻿using API.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Domain.Models;
 
 namespace API.Domain.Repository
 {
-    public interface IGroupRepository : IRepository<GroupModel>
+    public interface IGroupRepository
     {
-        Task<List<GroupModel>> GetGroups();
-        Task<GroupModel> GetGroupById(Guid id);
+        Task<List<GroupModel>> GetAll();
+
+        Task<GroupModel> GetById(Guid id);
+
+        Task<GroupModel> Create(GroupModel model);
+
+        Task<GroupModel> Update(GroupModel model);
+
+        void Delete(Guid groupId);
     }
 }

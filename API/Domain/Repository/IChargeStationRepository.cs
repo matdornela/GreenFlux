@@ -5,10 +5,16 @@ using System.Threading.Tasks;
 
 namespace API.Domain.Repository
 {
-    public interface IChargeStationRepository : IRepository<ChargeStationModel>
+    public interface IChargeStationRepository
     {
-        Task<ChargeStationModel> GetChargeStationByIdAsync(Guid id);
+        Task<ChargeStationModel> GetByIdAsync(Guid id);
 
         Task<List<ChargeStationModel>> GetAllChargeStationsByGroupIdAsync(Guid groupId);
+
+        Task<ChargeStationModel> Create(ChargeStationModel model);
+
+        Task<ChargeStationModel> Update(ChargeStationModel model);
+
+        void Remove(Guid chargeStationId);
     }
 }

@@ -7,8 +7,14 @@ namespace API.Presentation.Services.Interface
 {
     public interface IChargeStationService
     {
-        Task<ChargeStationDTO> GetChargeStationById(Guid id);
+        Task<ChargeStationDTO> GetById(Guid id);
 
-        Task<List<ChargeStationDTO>> GetChargeStationsByGroup(Guid groupId);
+        Task<List<ChargeStationDTO>> GetChargeStationsByGroupId(Guid groupId);
+
+        Task<ChargeStationDTO> Create(ChargeStationDTO chargeStation);
+
+        Task<ChargeStationDTO> Update(ChargeStationDTO chargeStation);
+
+        Task Remove(Guid chargeStationId);
     }
 }

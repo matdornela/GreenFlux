@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using GreenFlux.API.DbContexts;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Linq;

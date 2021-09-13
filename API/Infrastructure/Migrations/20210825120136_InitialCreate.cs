@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace API.Migrations
 {
@@ -43,8 +43,7 @@ namespace API.Migrations
                 name: "Connectors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MaxCurrent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ChargeStationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },

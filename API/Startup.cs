@@ -38,11 +38,8 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
-            IMapper mapper = MappingConfiguration.RegisterMaps().CreateMapper();
-            services.AddSingleton(mapper);
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //services.AddAutoMapper(AutoMapperUtil.GetAutoMapperProfilesFromAllAssemblies().ToArray());
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(AutoMapperUtil.GetAutoMapperProfilesFromAllAssemblies().ToArray());
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -71,7 +68,7 @@ namespace API
                 endpoints.MapControllers();
             });
 
-            //MappingConfiguration.RegisterMaps();
+            MappingConfiguration.RegisterMaps();
         }
     }
 }

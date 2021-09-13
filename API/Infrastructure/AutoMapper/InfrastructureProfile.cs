@@ -8,8 +8,8 @@ namespace API.Infrastructure.AutoMapper
     {
         public InfrastructureProfile()
         {
-            CreateMap<ChargeStation, ChargeStationModel>().ReverseMap();
             CreateMap<Connector, ConnectorModel>().ReverseMap();
+            CreateMap<ChargeStation, ChargeStationModel>().ReverseMap();
             CreateMap<Group, GroupModel>().ReverseMap();
         }
     }

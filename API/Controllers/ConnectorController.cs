@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Infrastructure.Models;
-using API.Presentation.DTO;
+﻿using API.Presentation.DTO;
+using API.Presentation.Exceptions;
 using API.Presentation.Services.Interface;
 using AutoMapper;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -26,10 +22,67 @@ namespace API.Controllers
         }
 
         [HttpGet("{connectorId}")]
-        public async Task<ActionResult<ConnectorDTO>> GetConnector(Guid chargeStationId, int connectorId)
+        public async Task<IActionResult> Get(Guid connectorId)
         {
-            var connector = await _connectorService.GetConnectorsById(chargeStationId, connectorId);
-            return Ok(connector);
+            try
+            {
+                var connector = await _connectorService.GetById(connectorId);
+                return Ok(connector);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> Create([FromBody] ConnectorDTO model)
+        {
+            try
+            {
+                var groupCreated = await _connectorService.Create(model);
+                return Ok(groupCreated);
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{ConnectorId}")]
+        public async Task<IActionResult> Remove(Guid ConnectorId)
+        {
+            try
+            {
+                await _connectorService.Remove(ConnectorId);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (BadRequestException)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("")]
+        public async Task<IActionResult> Update([FromBody] ConnectorDTO model)
+        {
+            try
+            {
+                var connectorUpdated = await _connectorService.Update(model);
+                return Ok(connectorUpdated);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (BadRequestException)
+            {
+                return BadRequest();
+            }
         }
     }
 }

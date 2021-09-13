@@ -7,14 +7,14 @@ namespace API.Domain.Business.Interface
 {
     public interface IGroupBusiness
     {
-        Task<List<GroupModel>> GetGroups();
+        Task<List<GroupModel>> GetAll();
 
-        Task<GroupModel> GetGroupById(Guid id);
+        Task<GroupModel> GetById(Guid id);
 
-        Task CreateGroup(GroupModel groupModel);
+        Task<GroupModel> Create(GroupModel groupModel);
 
-        Task DeleteGroup(Guid groupId);
+        Task Remove(Guid groupId);
 
-        Task<GroupModel> UpdateGroup(Guid groupId, GroupModel updateGroup);
+        Task<GroupModel> Update(GroupModel model);
     }
 }

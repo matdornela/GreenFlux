@@ -7,8 +7,14 @@ namespace API.Presentation.Services.Interface
 {
     public interface IConnectorService
     {
-        Task<List<ConnectorDTO>> GetConnectorsByChargeStation(Guid chargeStationId);
+        Task<List<ConnectorDTO>> GetAllByChargeStationId(Guid chargeStationId);
 
-        Task<ConnectorDTO> GetConnectorsById(Guid chargeStationId, int connectorId);
+        Task<ConnectorDTO> GetById(Guid connectorId);
+
+        Task<ConnectorDTO> Create(ConnectorDTO connectorDTO);
+
+        Task<ConnectorDTO> Update(ConnectorDTO updateConnector);
+
+        Task Remove(Guid connectorId);
     }
 }

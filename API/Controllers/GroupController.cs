@@ -1,10 +1,9 @@
 ﻿using API.Presentation.DTO;
+using API.Presentation.Exceptions;
 using API.Presentation.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers
 {
@@ -20,26 +19,75 @@ namespace API.Controllers
         }
 
         [HttpGet("{groupId}")]
-        public async Task<ActionResult<GroupDTO>> GetGroup(Guid groupId)
+        public async Task<IActionResult> Get(Guid groupId)
         {
             try
             {
-                var group = await _groupService.GetGroupById(groupId);
+                var group = await _groupService.GetById(groupId);
                 return Ok(group);
             }
-            catch (Exception ex)
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (BadRequestException)
             {
                 return BadRequest();
             }
         }
+
         [HttpPost("")]
-        public async Task<ActionResult<GroupDTO>> CreateGroup([FromBody] SaveGroupDTO saveGroupDTO)
+        public async Task<IActionResult> Create([FromBody] GroupDTO model)
         {
-            var newGroup = await _groupService.CreateGroup(groupToCreate);
+            try
+            {
+                var groupCreated = await _groupService.Create(model);
+                return Ok(groupCreated);
+            }
+            catch (UIException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-            var GroupDTO = _mapper.Map<Group, GroupDTO>(newGroup);
+        [HttpDelete("{groupId}")]
+        public async Task<IActionResult> Remove(Guid groupId)
+        {
+            try
+            {
+                await _groupService.Remove(groupId);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (BadRequestException)
+            {
+                return BadRequest();
+            }
+        }
 
-            return Ok(GroupDTO);
+        [HttpPut("")]
+        public async Task<IActionResult> Update([FromBody] GroupDTO model)
+        {
+            try
+            {
+                var groupUpdated = await _groupService.Update(model);
+                return Ok(groupUpdated);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (BadRequestException)
+            {
+                return BadRequest();
+            }
         }
     }
 }

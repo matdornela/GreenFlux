@@ -1,68 +1,126 @@
 ﻿using API.Domain.Business.Interface;
+using API.Domain.Exceptions;
 using API.Domain.Models;
 using API.Domain.Repository;
+using API.Presentation.Exceptions;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace API.Domain.Business
 {
     public class GroupBusiness : IGroupBusiness
     {
         private readonly IGroupRepository _groupRepository;
+        private readonly IChargeStationRepository _chargeStationRepository;
         private readonly IMapper _mapper;
 
-        public GroupBusiness(IGroupRepository groupRepository, IMapper mapper)
+        public GroupBusiness(IGroupRepository groupRepository, IMapper mapper, IChargeStationRepository chargeStationRepository)
         {
             _groupRepository = groupRepository;
             _mapper = mapper;
+            _chargeStationRepository = chargeStationRepository;
         }
 
-        public Task<List<GroupModel>> GetGroups()
-        => _groupRepository.GetGroups();
+        public Task<List<GroupModel>> GetAll()
+        => _groupRepository.GetAll();
 
-        public async Task<GroupModel> GetGroupById(Guid id)
+        public async Task<GroupModel> GetById(Guid id)
         {
-            var data = await _groupRepository.GetGroupById(id);
+            var data = await _groupRepository.GetById(id);
             return data;
         }
 
-        public async Task CreateGroup(GroupModel groupModel)
+        public async Task<GroupModel> Create(GroupModel groupModel)
         {
-            await _groupRepository.AddAsync(groupModel);
-        }
-
-
-        public async Task DeleteGroup(Guid groupId)
-        {
-            var group = await _groupRepository.GetByIdAsync(groupId);
-
-            if (group != null)
+            if (groupModel.ChargeStations.Count > 1)
             {
-                if (group.ChargeStations != null)
+                throw new BusinessException("You can only create one Charge Station per call.");
+            }
+
+            var chargeStations = groupModel.ChargeStations.ToList();
+
+            var chargeStationConnectors = chargeStations.SelectMany(x => x.Connectors).ToList();
+
+            List<ConnectorModel> listConnector = new List<ConnectorModel>();
+
+            decimal sum = 0;
+
+            foreach (var connectorModel in chargeStationConnectors)
+            {
+                sum += connectorModel.MaxCurrent;
+
+                if (sum > groupModel.Capacity)
                 {
-                    foreach (var chargeStation in group.ChargeStations)
-                    {
-                        group.ChargeStations.Remove(chargeStation);
-                    }
+                    listConnector.Add(connectorModel);
                 }
             }
-            else
-            {
-                throw new Exception($"Group not found with groupId: {groupId}");
-            }
-            _groupRepository.Remove(group);
+
+            chargeStationConnectors.RemoveAll(item => listConnector.Contains(item));
+
+            groupModel.ChargeStations.First().Connectors = chargeStationConnectors;
+
+            var groupCreated = await _groupRepository.Create(groupModel);
+
+            return groupCreated;
         }
 
-        public async Task<GroupModel> UpdateGroup(Guid groupId, GroupModel updateGroup)
+        public async Task Remove(Guid groupId)
         {
-            var group = await _groupRepository.GetByIdAsync(groupId);
+            try
+            {
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var group = await _groupRepository.GetById(groupId);
 
-            //validate if capacity greater than 0;
-            _groupRepository.Update(updateGroup);
+                    var listChargeStation = group.ChargeStations.ToList();
 
-            return group;
+                    foreach (var chargeStation in listChargeStation)
+                    {
+                        _chargeStationRepository.Remove(chargeStation.Id);
+                    }
+
+                    _groupRepository.Delete(groupId);
+                    scope.Complete();
+                }
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw new NotFoundException(e.Message);
+                }
+            }
+        }
+
+        public async Task<GroupModel> Update(GroupModel model)
+        {
+            try
+            {
+                var group = await _groupRepository.GetById(model.Id);
+
+                var listChargeStation = group.ChargeStations.ToList();
+
+                var capacityConnectorsOfAllChargeStations = listChargeStation.SelectMany(x => x.Connectors).Sum(x => x.MaxCurrent);
+
+                if (model.Capacity < capacityConnectorsOfAllChargeStations)
+                {
+                    throw new BusinessException("A group's capacity must be greater or equal to the combined capacity of its members.");
+                }
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw;
+                }
+            }
+
+            var groupUpdated = await _groupRepository.Update(model);
+            return groupUpdated;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using API.Domain.Business.Interface;
+using API.Domain.Exceptions;
 using API.Domain.Models;
 using API.Domain.Repository;
+using API.Presentation.Exceptions;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Domain.Business
@@ -11,13 +13,11 @@ namespace API.Domain.Business
     public class ConnectorBusiness : IConnectorBusiness
     {
         private readonly IConnectorRepository _connectorRepository;
-        private readonly IGroupRepository _groupRepository;
         private readonly IChargeStationRepository _chargeStationRepository;
 
-        public ConnectorBusiness(IConnectorRepository connectorRepository, IGroupRepository groupRepository, IChargeStationRepository chargeStationRepository)
+        public ConnectorBusiness(IConnectorRepository connectorRepository, IGroupRepository groupRepository, IChargeStationRepository chargeStationRepository, IMapper mapper)
         {
             _connectorRepository = connectorRepository;
-            _groupRepository = groupRepository;
             _chargeStationRepository = chargeStationRepository;
         }
 
@@ -26,43 +26,53 @@ namespace API.Domain.Business
             return _connectorRepository.GetConnectorsByChargeStation(chargeStationId);
         }
 
-        public Task<ConnectorModel> GetConnectorsById(Guid chargeStationId, int connectorId)
+        public async Task<ConnectorModel> Create(ConnectorModel model)
         {
-            return _connectorRepository.GetConnectorsById(chargeStationId, connectorId);
+            var chargeStation = await _chargeStationRepository.GetByIdAsync(model.ChargeStationId);
+
+            if (model.ChargeStationId == Guid.Empty)
+            {
+                throw new BusinessException("A Connector cannot exist in the domain without a Charge Station.");
+            }
+
+            if (chargeStation != null && chargeStation != null & chargeStation.Connectors.Count >= 5)
+            {
+                throw new BusinessException("You can't create more connector to this charge station because it's already exceed the supported limit.");
+            }
+
+            var connectorCreated = await _connectorRepository.Create(model);
+            return connectorCreated;
         }
 
-        public async Task<ConnectorModel> CreateConnector(Guid groupId, Guid chargeStationId, ConnectorModel newConnector)
+        public Task<ConnectorModel> GetById(Guid connectorId)
         {
-            var chargeStation = await _chargeStationRepository.GetByIdAsync(chargeStationId);
-
-            ConnectorModel model = new ConnectorModel();
-
-            try
-            {
-                model.ChargeStationId = chargeStationId;
-                model.MaxCurrent = newConnector.MaxCurrent;
-            }
-            catch (Exception ex)
-            {
-            }
-            return model;
+            return _connectorRepository.GetById(connectorId);
         }
 
-        public async Task<ConnectorModel> UpdateConnector(Guid groupId, Guid chargeStationId, int connectorId, ConnectorModel updateConnector)
+        public async Task<ConnectorModel> Update(ConnectorModel model)
         {
-            var group = await _groupRepository.GetByIdAsync(groupId);
-            var chargeStation = group.ChargeStations.FirstOrDefault(x => x.Id == chargeStationId);
-            var connector = chargeStation?.Connectors.FirstOrDefault(x => x.Id == connectorId);
+            if (model.MaxCurrent <= 0)
+            {
+                throw new BusinessException("Value must be greater than zero.");
+            }
 
+            var connectorUpdated = await _connectorRepository.Update(model);
+            return connectorUpdated;
+        }
+
+        public async Task Remove(Guid connectorId)
+        {
             try
             {
-                _connectorRepository.Update(updateConnector);
+                _connectorRepository.Remove(connectorId);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (e is BusinessException)
+                {
+                    throw new NotFoundException(e.Message);
+                }
             }
-
-            return updateConnector;
         }
     }
 }

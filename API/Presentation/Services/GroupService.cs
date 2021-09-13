@@ -1,11 +1,13 @@
 ﻿using API.Domain.Business.Interface;
+using API.Domain.Exceptions;
+using API.Domain.Models;
 using API.Presentation.DTO;
+using API.Presentation.Exceptions;
 using API.Presentation.Services.Interface;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Domain.Models;
 
 namespace API.Presentation.Services
 {
@@ -20,34 +22,131 @@ namespace API.Presentation.Services
             _mapper = mapper;
         }
 
-        public async Task<List<GroupDTO>> GetGroups()
+        public async Task<List<GroupDTO>> GetAll()
         {
-            var list = _groupBusiness.GetGroups();
+            var list = _groupBusiness.GetAll();
 
             return _mapper.Map<List<GroupDTO>>(list);
         }
 
-        public async Task<GroupDTO> GetGroupById(Guid id)
+        public async Task<GroupDTO> GetById(Guid id)
         {
-            var data = await _groupBusiness.GetGroupById(id);
+            try
+            {
+                var data = await _groupBusiness.GetById(id);
 
-            var dataMapped = _mapper.Map<GroupModel, GroupDTO>(data);
+                if (data.Id == Guid.Empty)
+                {
+                    throw new NotFoundException();
+                }
 
-            return dataMapped;
+                var dataMapped = _mapper.Map<GroupModel, GroupDTO>(data);
+
+                return dataMapped;
+            }
+            catch (Exception e)
+            {
+                if (e is NotFoundException)
+                {
+                    throw;
+                }
+            }
+
+            return await Task.FromResult<GroupDTO>(null);
         }
 
-        public async Task CreateGroup(GroupDTO groupDto)
+        public async Task<GroupDTO> Create(GroupDTO groupDto)
         {
-            var groupModel = _mapper.Map<GroupDTO, GroupModel>(groupDto);
+            try
+            {
+                var groupModel = _mapper.Map<GroupDTO, GroupModel>(groupDto);
 
-            await _groupBusiness.CreateGroup(groupModel);
+                var groupExists = await _groupBusiness.GetById(groupModel.Id);
+
+                if (groupExists != null)
+                {
+                    throw new BadRequestException("Group already exists in the database.");
+                }
+
+                var groupCreated = await _groupBusiness.Create(groupModel);
+
+                return _mapper.Map<GroupModel, GroupDTO>(groupCreated);
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw;
+                }
+                if (e is UIException)
+                {
+                    throw;
+                }
+                if (e is BadRequestException)
+                {
+                    throw;
+                }
+            }
+
+            return await Task.FromResult<GroupDTO>(null);
         }
 
-        public async Task<GroupDTO> UpdateGroup(Guid groupId, GroupDTO updateGroup)
+        public async Task<GroupDTO> Update(GroupDTO updateGroup)
         {
-            var model = _mapper.Map<GroupDTO, GroupModel>(updateGroup);
-            var data = await _groupBusiness.UpdateGroup(groupId, model);
-            return _mapper.Map<GroupDTO>(data);
-        } 
+            try
+            {
+                var groupModel = _mapper.Map<GroupDTO, GroupModel>(updateGroup);
+
+                var groupExists = await _groupBusiness.GetById(groupModel.Id);
+
+                if (groupExists == null)
+                {
+                    throw new NotFoundException();
+                }
+
+                var groupUpdated = await _groupBusiness.Update(groupModel);
+
+                return _mapper.Map<GroupModel, GroupDTO>(groupUpdated);
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw new BadRequestException(e.Message);
+                }
+                if (e is NotFoundException)
+                {
+                    throw;
+                }
+            }
+
+            return await Task.FromResult<GroupDTO>(null);
+        }
+
+        public async Task Remove(Guid groupId)
+        {
+            try
+            {
+                var groupExists = await _groupBusiness.GetById(groupId);
+
+                if (groupExists == null)
+                {
+                    throw new NotFoundException();
+                }
+
+                await _groupBusiness.Remove(groupId);
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw;
+                }
+                if (e is NotFoundException)
+                {
+                    throw;
+                }
+            }
+        }
     }
 }

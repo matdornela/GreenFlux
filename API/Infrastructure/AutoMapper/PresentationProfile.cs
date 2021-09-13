@@ -9,10 +9,9 @@ namespace API.Infrastructure.AutoMapper
     {
         public PresentationProfile()
         {
-            CreateMap<ChargeStationDTO, ChargeStationModel>().ReverseMap();
             CreateMap<ConnectorDTO, ConnectorModel>().ReverseMap();
-            CreateMap<GroupDTO, GroupModel>();
-            CreateMap<GroupModel, GroupDTO>();
+            CreateMap<ChargeStationDTO, ChargeStationModel>().ReverseMap();
+            CreateMap<GroupDTO, GroupModel>().ReverseMap();
         }
     }
 }

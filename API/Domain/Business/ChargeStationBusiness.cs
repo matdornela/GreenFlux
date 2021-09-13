@@ -1,6 +1,8 @@
 ﻿using API.Domain.Business.Interface;
+using API.Domain.Exceptions;
 using API.Domain.Models;
 using API.Domain.Repository;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,16 +12,68 @@ namespace API.Domain.Business
     public class ChargeStationBusiness : IChargeStationBusiness
     {
         private readonly IChargeStationRepository _chargeStationRepository;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IMapper _mapper;
 
-        public ChargeStationBusiness(IChargeStationRepository chargeStationRepository)
+        public ChargeStationBusiness(IChargeStationRepository chargeStationRepository, IGroupRepository groupRepository, IMapper mapper)
         {
             _chargeStationRepository = chargeStationRepository;
+            _groupRepository = groupRepository;
+            _mapper = mapper;
         }
 
-        public Task<ChargeStationModel> GetChargeStationById(Guid id) =>
-            _chargeStationRepository.GetChargeStationByIdAsync(id);
+        public async Task<ChargeStationModel> Create(ChargeStationModel model)
+        {
+            var group = await _groupRepository.GetById(model.GroupId);
 
-        public Task<List<ChargeStationModel>> GetChargeStationsByGroup(Guid groupId) =>
-            _chargeStationRepository.GetAllChargeStationsByGroupIdAsync(groupId);
+            if (model.Connectors.Count >= 5)
+            {
+                throw new BusinessException("You can't add more than 5 connectors to this charge station.");
+            }
+
+            if (model.GroupId == Guid.Empty)
+            {
+                throw new BusinessException("The Charge Station cannot exist in the domain without Group.");
+            }
+
+            if (group != null && group.Id != model.GroupId)
+            {
+                throw new BusinessException("The Charge Station can be only in one Group at the same time.");
+            }
+
+            var chargeStationCreated = await _chargeStationRepository.Create(model);
+            return chargeStationCreated;
+        }
+
+        public async Task<ChargeStationModel> Update(ChargeStationModel model)
+        {
+            if (model.Connectors.Count >= 5)
+            {
+                throw new BusinessException("You can't add more than 5 connectors to this charge station.");
+            }
+
+            var chargeStationUpdated = await _chargeStationRepository.Update(model);
+
+            return chargeStationUpdated;
+        }
+
+        public async Task Remove(Guid chargeStationId)
+        {
+            try
+            {
+                _chargeStationRepository.Remove(chargeStationId);
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public Task<ChargeStationModel> GetById(Guid id) => _chargeStationRepository.GetByIdAsync(id);
+
+        public Task<List<ChargeStationModel>> GetChargeStationsByGroupId(Guid groupId) => _chargeStationRepository.GetAllChargeStationsByGroupIdAsync(groupId);
     }
 }

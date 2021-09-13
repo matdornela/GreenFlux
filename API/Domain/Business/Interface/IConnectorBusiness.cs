@@ -1,7 +1,7 @@
-﻿using System;
+﻿using API.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Domain.Models;
 
 namespace API.Domain.Business.Interface
 {
@@ -9,11 +9,12 @@ namespace API.Domain.Business.Interface
     {
         Task<List<ConnectorModel>> GetConnectorsByChargeStation(Guid chargeStationId);
 
-        Task<ConnectorModel> GetConnectorsById(Guid chargeStationId, int connectorId);
+        Task<ConnectorModel> GetById(Guid connectorId);
 
-        Task<ConnectorModel> CreateConnector(Guid groupId, Guid chargeStationId, ConnectorModel newConnector);
+        Task<ConnectorModel> Create(ConnectorModel model);
 
-        Task<ConnectorModel> UpdateConnector(Guid groupId, Guid chargeStationId, int connectorId,
-            ConnectorModel updateConnector);
+        Task<ConnectorModel> Update(ConnectorModel model);
+
+        Task Remove(Guid connectorId);
     }
 }

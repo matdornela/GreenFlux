@@ -5,6 +5,7 @@ using API.Domain.Repository;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Domain.Business
@@ -13,13 +14,11 @@ namespace API.Domain.Business
     {
         private readonly IChargeStationRepository _chargeStationRepository;
         private readonly IGroupRepository _groupRepository;
-        private readonly IMapper _mapper;
 
-        public ChargeStationBusiness(IChargeStationRepository chargeStationRepository, IGroupRepository groupRepository, IMapper mapper)
+        public ChargeStationBusiness(IChargeStationRepository chargeStationRepository, IGroupRepository groupRepository)
         {
             _chargeStationRepository = chargeStationRepository;
             _groupRepository = groupRepository;
-            _mapper = mapper;
         }
 
         public async Task<ChargeStationModel> Create(ChargeStationModel model)
@@ -41,6 +40,10 @@ namespace API.Domain.Business
                 throw new BusinessException("The Charge Station can be only in one Group at the same time.");
             }
 
+            if (model.Connectors == null || !model.Connectors.Any())
+            {
+                throw new BusinessException("You can't create a charge station without a connector");
+            }
             var chargeStationCreated = await _chargeStationRepository.Create(model);
             return chargeStationCreated;
         }

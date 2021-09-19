@@ -7,6 +7,7 @@ using API.Presentation.Services.Interface;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Presentation.Services
@@ -14,12 +15,16 @@ namespace API.Presentation.Services
     public class GroupService : IGroupService
     {
         private readonly IGroupBusiness _groupBusiness;
+        private readonly IChargeStationBusiness _chargeStationBusiness;
+        private readonly IConnectorBusiness _connectorBusiness;
         private readonly IMapper _mapper;
 
-        public GroupService(IGroupBusiness groupBusiness, IMapper mapper)
+        public GroupService(IGroupBusiness groupBusiness, IMapper mapper, IChargeStationBusiness chargeStationBusiness, IConnectorBusiness connectorBusiness)
         {
             _groupBusiness = groupBusiness;
             _mapper = mapper;
+            _chargeStationBusiness = chargeStationBusiness;
+            _connectorBusiness = connectorBusiness;
         }
 
         public async Task<List<GroupDTO>> GetAll()

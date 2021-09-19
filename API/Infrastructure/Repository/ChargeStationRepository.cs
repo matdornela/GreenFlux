@@ -38,7 +38,6 @@ namespace API.Infrastructure.Repository
             var data = await Context.ChargeStations
                 .AsNoTracking()
                 .Where(a => a.GroupId == groupId)
-                .Include(a => a.Connectors)
                 .ToListAsync();
 
             return _mapper.Map<List<ChargeStationModel>>(data);

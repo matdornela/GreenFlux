@@ -3,7 +3,6 @@ using API.Domain.Exceptions;
 using API.Domain.Models;
 using API.Domain.Repository;
 using API.Presentation.Exceptions;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace API.Domain.Business
         private readonly IConnectorRepository _connectorRepository;
         private readonly IChargeStationRepository _chargeStationRepository;
 
-        public ConnectorBusiness(IConnectorRepository connectorRepository, IGroupRepository groupRepository, IChargeStationRepository chargeStationRepository, IMapper mapper)
+        public ConnectorBusiness(IConnectorRepository connectorRepository, IChargeStationRepository chargeStationRepository)
         {
             _connectorRepository = connectorRepository;
             _chargeStationRepository = chargeStationRepository;

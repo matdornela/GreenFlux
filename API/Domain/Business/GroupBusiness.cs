@@ -3,7 +3,6 @@ using API.Domain.Exceptions;
 using API.Domain.Models;
 using API.Domain.Repository;
 using API.Presentation.Exceptions;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +15,10 @@ namespace API.Domain.Business
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IChargeStationRepository _chargeStationRepository;
-        private readonly IMapper _mapper;
 
-        public GroupBusiness(IGroupRepository groupRepository, IMapper mapper, IChargeStationRepository chargeStationRepository)
+        public GroupBusiness(IGroupRepository groupRepository, IChargeStationRepository chargeStationRepository)
         {
             _groupRepository = groupRepository;
-            _mapper = mapper;
             _chargeStationRepository = chargeStationRepository;
         }
 
@@ -36,32 +33,50 @@ namespace API.Domain.Business
 
         public async Task<GroupModel> Create(GroupModel groupModel)
         {
-            if (groupModel.ChargeStations.Count > 1)
+            var chargeStationsExist = await _chargeStationRepository.GetAllChargeStationsByGroupIdAsync(groupModel.Id);
+            if (chargeStationsExist != null && chargeStationsExist.Any())
             {
-                throw new BusinessException("You can only create one Charge Station per call.");
+                throw new BusinessException("The Charge Station can be only in one Group at the same time.");
             }
 
-            var chargeStations = groupModel.ChargeStations.ToList();
-
-            var chargeStationConnectors = chargeStations.SelectMany(x => x.Connectors).ToList();
-
-            List<ConnectorModel> listConnector = new List<ConnectorModel>();
-
-            decimal sum = 0;
-
-            foreach (var connectorModel in chargeStationConnectors)
+            if (groupModel.ChargeStations != null && groupModel.ChargeStations.Any())
             {
-                sum += connectorModel.MaxCurrent;
-
-                if (sum > groupModel.Capacity)
+                if (groupModel.ChargeStations.Count > 1)
                 {
-                    listConnector.Add(connectorModel);
+                    throw new BusinessException("You can only create one Charge Station per call.");
+                }
+
+                decimal sum1 = 0;
+                List<ConnectorModel> listConnectorToBeRemoved = new List<ConnectorModel>();
+                List<ConnectorModel> connectors = new List<ConnectorModel>();
+
+                foreach (var chargeStation in groupModel.ChargeStations)
+                {
+                    connectors = chargeStation.Connectors.ToList();
+                    if (connectors.Count > 5)
+                    {
+                        throw new BusinessException("You can't add more than 5 connectors to this charge station.");
+                    }
+                    foreach (var connector in connectors)
+                    {
+                        sum1 += connector.MaxCurrent;
+
+                        if (sum1 > groupModel.Capacity)
+                        {
+                            listConnectorToBeRemoved.Add(connector);
+                        }
+                    }
+                }
+
+                connectors.RemoveAll(item => listConnectorToBeRemoved.Contains(item));
+
+                if (connectors.Any())
+                {
+                    groupModel.ChargeStations.First().Connectors = connectors;
                 }
             }
 
-            chargeStationConnectors.RemoveAll(item => listConnector.Contains(item));
 
-            groupModel.ChargeStations.First().Connectors = chargeStationConnectors;
 
             var groupCreated = await _groupRepository.Create(groupModel);
 

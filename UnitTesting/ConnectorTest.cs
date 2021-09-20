@@ -25,7 +25,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task GetConnector_GivenConnectorId_ReturnsTheConnector(ConnectorModel connectorModel, Guid groupGuid)
+        public async Task GetById_GivenConnectorId_ReturnsConnector(ConnectorModel connectorModel, Guid groupGuid)
         {
             //arrange
             _connectorRepository.GetById(groupGuid).Returns(connectorModel);
@@ -39,11 +39,10 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateConnector_GivenConnector_ReturnsTheConnector(ConnectorModel connectorModel, Guid connectorGuid)
+        public async Task Create_GivenConnector_ReturnsConnector(ConnectorModel connectorModel, Guid connectorGuid)
         {
-            Guid g1 = Guid.NewGuid();
             //arrange
-            connectorModel.ChargeStationId = g1;
+            connectorModel.ChargeStationId = Guid.NewGuid();
             connectorModel.MaxCurrent = 5;
             _connectorRepository.WhenForAnyArgs(g => g.Create(connectorModel)).Do(g => { connectorModel.Id = connectorGuid; });
 
@@ -56,7 +55,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateConnector_GivenConnectorWithChargeStationNull_ThrowsException(ConnectorModel connectorModel, Guid connectorGuid)
+        public async Task Create_GivenConnectorWithChargeStationNull_ThrowsException(ConnectorModel connectorModel, Guid connectorGuid)
         {
             //arrange
             connectorModel.MaxCurrent = 20;

@@ -25,7 +25,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task GetChargeStation_GivenChargeStationId_ReturnsTheChargeStation(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
+        public async Task GetById_GivenChargeStationId_ReturnsChargeStation(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
         {
             //arrange
             _chargeStationRepository.GetByIdAsync(chargeStationGuid).Returns(chargeStationModel);
@@ -39,25 +39,23 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateChargeStation_GivenChargeStation_ReturnsTheChargeStation(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
+        public async Task Create_GivenChargeStation_ReturnsChargeStation(ChargeStationModel chargeStationModel)
         {
             //arrange
             chargeStationModel.Name = "ChargeStation 00020";
-            _chargeStationRepository.WhenForAnyArgs(g => g.Create(chargeStationModel)).Do(g =>
-            {
-                chargeStationModel.Id = chargeStationGuid;
-            });
+            chargeStationModel.Id = Guid.NewGuid();
+            _chargeStationRepository.Create(chargeStationModel).Returns(chargeStationModel);
 
             //act
-            await _chargeStationBusiness.Create(chargeStationModel);
+            var chargeStationCreated = await _chargeStationBusiness.Create(chargeStationModel);
 
             //assert
             await _chargeStationRepository.Received().Create(chargeStationModel);
-            Assert.Equal(chargeStationGuid, chargeStationModel.Id);
+            Assert.Equal(chargeStationModel.Id, chargeStationCreated.Id);
         }
 
         [Theory, AutoData]
-        public async Task CreateChargeStation_GivenChargeStationWithGroupNull_ThrowsException(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
+        public async Task Create_GivenChargeStationWithGroupNull_ThrowsException(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
         {
             //arrange
             chargeStationModel.Name = "Charge Station 0030";
@@ -73,7 +71,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateChargeStation_GivenChargeStationWithNoConnector_ThrowsException(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
+        public async Task Create_GivenChargeStationWithNoConnector_ThrowsException(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
         {
             //arrange
             chargeStationModel.Name = "Charge Station 0030";

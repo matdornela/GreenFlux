@@ -27,7 +27,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task GetGroup_GivenGroupId_ReturnsTheGroup(GroupModel groupModel, Guid groupGuid)
+        public async Task GetById_GivenGroupId_ReturnsGroup(GroupModel groupModel, Guid groupGuid)
         {
             //arrange
             _groupRepository.GetById(groupGuid).Returns(groupModel);
@@ -41,7 +41,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateGroup_GivenGroup_ReturnsTheGroup(GroupModel groupModel, Guid groupGuid)
+        public async Task Create_GivenGroup_ReturnsGroup(GroupModel groupModel, Guid groupGuid)
         {
             //arrange
             groupModel.Name = "Group 00020";
@@ -58,7 +58,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateGroup_GivenGroupWithMoreThanOneChargeStation_ThrowsException(GroupModel groupModel, Guid groupGuid)
+        public async Task Create_GivenGroupWithMoreThanOneChargeStation_ThrowsException(GroupModel groupModel, Guid groupGuid)
         {
             //arrange
             groupModel.Name = "Group 00021";
@@ -73,7 +73,7 @@ namespace UnitTesting
         }
 
         [Theory, AutoData]
-        public async Task CreateGroup_GivenGroupAndChargeStationWithMoreThanFiveConnectors_ThrowsException(GroupModel groupModel, Guid groupGuid)
+        public async Task Create_GivenGroupAndChargeStationWithMoreThanFiveConnectors_ThrowsException(GroupModel groupModel, Guid groupGuid)
         {
             //arrange
             groupModel.Name = "Group 00022";

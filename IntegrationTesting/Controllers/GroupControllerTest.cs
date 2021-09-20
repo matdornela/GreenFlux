@@ -15,11 +15,11 @@ using Xunit;
 
 namespace IntegrationTesting.Controllers
 {
-    public class GroupControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class GroupControllerTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
 
-        public GroupControllerIntegrationTests(CustomWebApplicationFactory<Startup> factory)
+        public GroupControllerTest(CustomWebApplicationFactory<Startup> factory)
         {
             _client = factory.CreateClient();
         }

@@ -13,11 +13,11 @@ using Xunit;
 
 namespace IntegrationTesting.Controllers
 {
-    public class ConnectorControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ConnectorControllerTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
 
-        public ConnectorControllerIntegrationTests(CustomWebApplicationFactory<Startup> factory)
+        public ConnectorControllerTest(CustomWebApplicationFactory<Startup> factory)
         {
             _client = factory.CreateClient();
         }

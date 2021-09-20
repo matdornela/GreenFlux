@@ -1,11 +1,11 @@
 ﻿using API;
-using GreenFlux.API.DbContexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using GreenFlux.Infrastructure.DbContexts;
 
 namespace IntegrationTesting
 {

@@ -18,4 +18,17 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Presentation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GreenFlux.Infrastructure\GreenFlux.Infrastructure.csproj" />
+    <ProjectReference Include="..\GreenFlux.Presentation\GreenFlux.Presentation.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Presentation\Presentation.csproj" />
+  </ItemGroup>
+
 </Project>

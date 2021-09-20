@@ -1,7 +1,7 @@
-﻿using API.Presentation.DTO;
-using API.Presentation.Exceptions;
-using API.Presentation.Services.Interface;
-using AutoMapper;
+﻿using AutoMapper;
+using GreenFlux.Presentation.DTO;
+using GreenFlux.Presentation.Exceptions;
+using GreenFlux.Presentation.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

@@ -1,5 +1,4 @@
 ﻿using API;
-using API.Presentation.DTO;
 using API.Routes;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -11,6 +10,7 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using GreenFlux.Presentation.DTO;
 using Xunit;
 
 namespace IntegrationTesting.Controllers
@@ -79,7 +79,6 @@ namespace IntegrationTesting.Controllers
             group.Id.Should().Be(groupDto.Id);
         }
 
-
         [Fact]
         public async Task CreateGroup_GivenGroupAndChargeWithConnectorsCapacityOverLimitInGroup_ReturnsBadRequest()
         {
@@ -135,7 +134,7 @@ namespace IntegrationTesting.Controllers
         {
             //arrange
 
-            var groupId = new Guid("FFD76118-A66B-416B-8BE3-42104A272AB4");
+            var groupId = new Guid("a0a66824-5513-421b-aec2-e1f84c0096a4");
 
             //act
             var response = await _client.DeleteAsync(ApiRoutes.Group.Delete.Replace("{groupId}", groupId.ToString()));
@@ -151,7 +150,7 @@ namespace IntegrationTesting.Controllers
         public async Task UpdateGroup_GivenGroup_ReturnsOk()
         {
             //arrange
-            var groupId = new Guid("FFD76118-A66B-416B-8BE3-42104A272AB4");
+            var groupId = new Guid("a0a66824-5513-421b-aec2-e1f84c0096a4");
 
             var groupDto = new GroupDTO
             {
@@ -178,7 +177,7 @@ namespace IntegrationTesting.Controllers
         public async Task UpdateGroup_GivenGroupAndChargeWithConnectorsCapacityOverLimitInGroup_ReturnsBadRequest()
         {
             //arrange
-            var groupId = new Guid("7C893936-1992-46D3-9551-90AEE081C463");
+            var groupId = new Guid("a0a66824-5513-421b-aec2-e1f84c0096a4");
 
             var groupDto = new GroupDTO
             {

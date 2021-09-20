@@ -1,9 +1,9 @@
-using API.Domain.Business;
-using API.Domain.Business.Interface;
-using API.Domain.Exceptions;
-using API.Domain.Models;
-using API.Domain.Repository;
 using AutoFixture.Xunit2;
+using GreenFlux.Domain.Business;
+using GreenFlux.Domain.Business.Interface;
+using GreenFlux.Domain.Exceptions;
+using GreenFlux.Domain.Models;
+using GreenFlux.Domain.Repository;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -91,7 +91,6 @@ namespace UnitTesting
             listChargeStation.Add(chargeStationModel);
 
             groupModel.ChargeStations = listChargeStation;
-
 
             List<ConnectorModel> connectors = new List<ConnectorModel>();
             for (int i = 0; i < 6; i++)

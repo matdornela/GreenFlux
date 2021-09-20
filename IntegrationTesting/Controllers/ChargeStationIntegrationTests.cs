@@ -1,5 +1,4 @@
 ﻿using API;
-using API.Presentation.DTO;
 using API.Routes;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -9,6 +8,7 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using GreenFlux.Presentation.DTO;
 using Xunit;
 
 namespace IntegrationTesting.Controllers
@@ -26,7 +26,7 @@ namespace IntegrationTesting.Controllers
         public async Task GetChargeStation_GivenChargeStationId_ReturnsOk()
         {
             //arrange
-            Guid chargeStationId = new Guid("5451119c-28af-41ba-a8f6-db43a4072edc");
+            Guid chargeStationId = new Guid("1a466d73-1df5-4027-8dce-6bdde4e98304");
 
             //act
             var response = await _client.GetAsync(ApiRoutes.ChargeStation.Get.Replace("{chargeStationId}", chargeStationId.ToString()));
@@ -78,7 +78,7 @@ namespace IntegrationTesting.Controllers
         {
             //arrange
 
-            var chargeStationId = new Guid("5451119c-28af-41ba-a8f6-db43a4072edc");
+            var chargeStationId = new Guid("1a466d73-1df5-4027-8dce-6bdde4e98304");
 
             //act
             var response = await _client.DeleteAsync(ApiRoutes.ChargeStation.Delete.Replace("{chargeStationId}", chargeStationId.ToString()));
@@ -94,12 +94,12 @@ namespace IntegrationTesting.Controllers
         public async Task UpdateChargeStation_GivenChargeStation_ReturnsOk()
         {
             //arrange
-            Guid chargeStationId = new Guid("5451119c-28af-41ba-a8f6-db43a4072edc");
+            Guid chargeStationId = new Guid("1a466d73-1df5-4027-8dce-6bdde4e98304");
             var chargeStationDto = new ChargeStationDTO
             {
                 Id = chargeStationId,
-                Name = "ChargeStation 0031",
-                GroupId = new Guid("d9967e27-8dd6-42d5-99c2-a820f309afaf"),
+                Name = "ChargeStation 0032",
+                GroupId = new Guid("a0a66824-5513-421b-aec2-e1f84c0096a4"),
                 Connectors = null
             };
 

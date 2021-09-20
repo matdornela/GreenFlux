@@ -1,8 +1,4 @@
-using System;
-using API.Infrastructure.AutoMapper;
-using API.Infrastructure.Configuration;
 using Autofac;
-using GreenFlux.API.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Linq;
-using AutoMapper;
+using GreenFlux.Infrastructure.AutoMapper;
+using GreenFlux.Infrastructure.DbContexts;
+using Infrastructure.Configuration;
 
 namespace API
 {

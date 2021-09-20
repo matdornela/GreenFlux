@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using API.Domain.Business;
-using API.Domain.Business.Interface;
-using API.Domain.Exceptions;
-using API.Domain.Models;
-using API.Domain.Repository;
-using AutoFixture.Xunit2;
+﻿using AutoFixture.Xunit2;
+using GreenFlux.Domain.Business;
+using GreenFlux.Domain.Business.Interface;
+using GreenFlux.Domain.Exceptions;
+using GreenFlux.Domain.Models;
+using GreenFlux.Domain.Repository;
 using NSubstitute;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace UnitTesting
@@ -19,6 +16,7 @@ namespace UnitTesting
         private readonly IGroupRepository _groupRepository;
         private readonly IChargeStationRepository _chargeStationRepository;
         private readonly IChargeStationBusiness _chargeStationBusiness;
+
         public ChargeStationTest()
         {
             _groupRepository = Substitute.For<IGroupRepository>();
@@ -45,7 +43,9 @@ namespace UnitTesting
         {
             //arrange
             chargeStationModel.Name = "ChargeStation 00020";
-            _chargeStationRepository.WhenForAnyArgs(g => g.Create(chargeStationModel)).Do(g => { chargeStationModel.Id = chargeStationGuid;
+            _chargeStationRepository.WhenForAnyArgs(g => g.Create(chargeStationModel)).Do(g =>
+            {
+                chargeStationModel.Id = chargeStationGuid;
             });
 
             //act
@@ -72,7 +72,6 @@ namespace UnitTesting
             Assert.Equal("The Charge Station cannot exist in the domain without Group.", ex.Message);
         }
 
-
         [Theory, AutoData]
         public async Task CreateChargeStation_GivenChargeStationWithNoConnector_ThrowsException(ChargeStationModel chargeStationModel, Guid chargeStationGuid)
         {
@@ -86,7 +85,7 @@ namespace UnitTesting
             var ex = await Assert.ThrowsAsync<BusinessException>(() => _chargeStationBusiness.Create(chargeStationModel));
 
             //assert
-            Assert.Equal("The Charge Station cannot exist in the domain without Group.", ex.Message);
+            Assert.Equal("You can't create a charge station without a connector.", ex.Message);
         }
     }
 }

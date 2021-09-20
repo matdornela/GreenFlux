@@ -40,7 +40,7 @@ namespace API.Presentation.Services
             {
                 var data = await _groupBusiness.GetById(id);
 
-                if (data.Id == Guid.Empty)
+                if (data == null)
                 {
                     throw new NotFoundException();
                 }

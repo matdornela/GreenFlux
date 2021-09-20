@@ -45,18 +45,37 @@ namespace API.Presentation.Services
 
         public async Task<ConnectorDTO> Create(ConnectorDTO connectorDTO)
         {
-            var connectorExists = await _connectorBusiness.GetById(connectorDTO.Id);
-
-            if (connectorExists != null)
+            try
             {
-                throw new BadRequestException("This connector already exists in the database");
+                var connectorExists = await _connectorBusiness.GetById(connectorDTO.Id);
+
+                if (connectorExists != null)
+                {
+                    throw new BadRequestException("This connector already exists in the database");
+                }
+
+                var chargeStation = await _chargeStationBusiness.GetById(connectorDTO.ChargeStationId);
+
+                if (chargeStation == null)
+                {
+                    throw new BadRequestException("There's not charge station registered for this connector");
+                }
             }
 
-            var chargeStation = await _chargeStationBusiness.GetById(connectorDTO.ChargeStationId);
-
-            if (chargeStation == null)
+            catch (Exception e)
             {
-                throw new BadRequestException("There's not charge station registered for this connector");
+                if (e is BusinessException)
+                {
+                    throw;
+                }
+                if (e is UIException)
+                {
+                    throw;
+                }
+                if (e is BadRequestException)
+                {
+                    throw;
+                }
             }
 
             var connectorModel = _mapper.Map<ConnectorModel>(connectorDTO);

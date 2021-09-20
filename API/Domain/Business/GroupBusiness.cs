@@ -76,8 +76,6 @@ namespace API.Domain.Business
                 }
             }
 
-
-
             var groupCreated = await _groupRepository.Create(groupModel);
 
             return groupCreated;
@@ -115,15 +113,55 @@ namespace API.Domain.Business
         {
             try
             {
-                var group = await _groupRepository.GetById(model.Id);
-
-                var listChargeStation = group.ChargeStations.ToList();
-
-                var capacityConnectorsOfAllChargeStations = listChargeStation.SelectMany(x => x.Connectors).Sum(x => x.MaxCurrent);
-
-                if (model.Capacity < capacityConnectorsOfAllChargeStations)
+                var chargeStationsExist = await _chargeStationRepository.GetAllChargeStationsByGroupIdAsync(model.Id);
+                if (chargeStationsExist != null && chargeStationsExist.Any())
                 {
-                    throw new BusinessException("A group's capacity must be greater or equal to the combined capacity of its members.");
+                    throw new BusinessException("The Charge Station can be only in one Group at the same time.");
+                }
+
+                if (model.ChargeStations != null && model.ChargeStations.Any())
+                {
+                    if (model.ChargeStations.Count > 1)
+                    {
+                        throw new BusinessException("You can only create one Charge Station per call.");
+                    }
+
+                    decimal sum1 = 0;
+                    List<ConnectorModel> listConnectorToBeRemoved = new List<ConnectorModel>();
+                    List<ConnectorModel> connectors = new List<ConnectorModel>();
+
+                    foreach (var chargeStation in model.ChargeStations)
+                    {
+                        connectors = chargeStation.Connectors.ToList();
+                        if (connectors.Count > 5)
+                        {
+                            throw new BusinessException("You can't add more than 5 connectors to this charge station.");
+                        }
+                        foreach (var connector in connectors)
+                        {
+                            sum1 += connector.MaxCurrent;
+
+                            if (sum1 > model.Capacity)
+                            {
+                                listConnectorToBeRemoved.Add(connector);
+                            }
+                        }
+                    }
+
+                    connectors.RemoveAll(item => listConnectorToBeRemoved.Contains(item));
+
+                    if (connectors.Any())
+                    {
+                        model.ChargeStations.First().Connectors = connectors;
+                    }
+
+                    var capacityConnectorsOfAllChargeStations = model.ChargeStations
+                        .SelectMany(x => x.Connectors).Sum(x => x.MaxCurrent);
+
+                    if (model.Capacity < capacityConnectorsOfAllChargeStations)
+                    {
+                        throw new BusinessException("A group's capacity must be greater or equal to the combined capacity of its members.");
+                    }
                 }
             }
             catch (Exception e)

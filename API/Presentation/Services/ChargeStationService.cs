@@ -47,16 +47,33 @@ namespace API.Presentation.Services
 
         public async Task<ChargeStationDTO> Create(ChargeStationDTO chargeStation)
         {
-            var chargeStationModel = _mapper.Map<ChargeStationDTO, ChargeStationModel>(chargeStation);
-
-            var chargeStationExists = await _chargeStationBusiness.GetById(chargeStationModel.Id);
-
-            if (chargeStationExists != null)
+            ChargeStationModel chargeStationCreated = null;
+            try
             {
-                throw new BadRequestException("This charge station is already registered in the database.");
-            }
+                var chargeStationModel = _mapper.Map<ChargeStationDTO, ChargeStationModel>(chargeStation);
 
-            var chargeStationCreated = await _chargeStationBusiness.Create(chargeStationModel);
+                var chargeStationExists = await _chargeStationBusiness.GetById(chargeStationModel.Id);
+
+                if (chargeStationExists != null)
+                {
+                    throw new BadRequestException("This charge station is already registered in the database.");
+                }
+
+                chargeStationCreated = await _chargeStationBusiness.Create(chargeStationModel);
+            }
+            catch (Exception e)
+            {
+                if (e is BusinessException)
+                {
+                    throw new BadRequestException();
+                }
+
+                if (e is UIException)
+                {
+                    throw;
+                }
+
+            }
 
             return _mapper.Map<ChargeStationModel, ChargeStationDTO>(chargeStationCreated);
         }

@@ -1,13 +1,13 @@
-﻿using API;
+﻿using System;
+using GreenFlux.API;
+using GreenFlux.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using GreenFlux.Infrastructure.DbContexts;
 
-namespace IntegrationTesting
+namespace GreenFlux.IntegrationTest
 {
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
     {

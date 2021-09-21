@@ -1,4 +1,4 @@
-﻿namespace API.Routes
+﻿namespace GreenFlux.API.Routes
 {
     public static class ApiRoutes
     {

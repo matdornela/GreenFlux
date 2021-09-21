@@ -1,4 +1,8 @@
+using System.Linq;
 using Autofac;
+using GreenFlux.Infrastructure.AutoMapper;
+using GreenFlux.Infrastructure.DbContexts;
+using Infrastructure.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,12 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Linq;
-using GreenFlux.Infrastructure.AutoMapper;
-using GreenFlux.Infrastructure.DbContexts;
-using Infrastructure.Configuration;
 
-namespace API
+namespace GreenFlux.API
 {
     public class Startup
     {

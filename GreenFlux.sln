@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{1E528A29-0A91-4ECD-90E9-2F82886FD127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenFlux.API", "GreenFlux.API\GreenFlux.API.csproj", "{1E528A29-0A91-4ECD-90E9-2F82886FD127}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{D0CDBA69-5D54-4D33-BB13-BEEDA6174A9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenFlux.UnitTest", "GreenFlux.UnitTest\GreenFlux.UnitTest.csproj", "{D0CDBA69-5D54-4D33-BB13-BEEDA6174A9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTesting", "IntegrationTesting\IntegrationTesting.csproj", "{005CEBAA-FEF4-49B7-9E16-BF80BB53FEA7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9332F05E-3AB7-4D77-8392-4503718F05DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenFlux.IntegrationTest", "GreenFlux.IntegrationTest\GreenFlux.IntegrationTest.csproj", "{005CEBAA-FEF4-49B7-9E16-BF80BB53FEA7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenFlux.Presentation", "GreenFlux.Presentation\GreenFlux.Presentation.csproj", "{09EE408E-D380-4F29-BFB8-7B189E02FB0D}"
 EndProject
@@ -50,10 +48,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{D0CDBA69-5D54-4D33-BB13-BEEDA6174A9E} = {9332F05E-3AB7-4D77-8392-4503718F05DA}
-		{005CEBAA-FEF4-49B7-9E16-BF80BB53FEA7} = {9332F05E-3AB7-4D77-8392-4503718F05DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52DB91FE-049D-46FE-AED2-8F9F43A59EF4}

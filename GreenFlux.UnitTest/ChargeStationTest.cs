@@ -1,15 +1,15 @@
-﻿using AutoFixture.Xunit2;
+﻿using System;
+using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using GreenFlux.Domain.Business;
 using GreenFlux.Domain.Business.Interface;
 using GreenFlux.Domain.Exceptions;
 using GreenFlux.Domain.Models;
 using GreenFlux.Domain.Repository;
 using NSubstitute;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace UnitTesting
+namespace GreenFlux.UnitTest
 {
     public class ChargeStationTest
     {

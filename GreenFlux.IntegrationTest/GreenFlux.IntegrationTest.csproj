@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
+    <ProjectReference Include="..\GreenFlux.API\GreenFlux.API.csproj" />
+    <ProjectReference Include="..\GreenFlux.Infrastructure\GreenFlux.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

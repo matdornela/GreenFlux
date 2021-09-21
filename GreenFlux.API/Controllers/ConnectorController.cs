@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Threading.Tasks;
+using AutoMapper;
 using GreenFlux.Presentation.DTO;
 using GreenFlux.Presentation.Exceptions;
 using GreenFlux.Presentation.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 
-namespace API.Controllers
+namespace GreenFlux.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

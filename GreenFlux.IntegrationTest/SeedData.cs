@@ -1,8 +1,8 @@
-﻿using GreenFlux.Infrastructure.DbContexts;
+﻿using System;
+using GreenFlux.Infrastructure.DbContexts;
 using GreenFlux.Infrastructure.Models;
-using System;
 
-namespace IntegrationTesting
+namespace GreenFlux.IntegrationTest
 {
     public static class SeedData
     {

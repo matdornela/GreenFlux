@@ -1,17 +1,15 @@
-﻿using API;
-using API.Routes;
-using FluentAssertions;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using GreenFlux.Presentation.DTO;
+using Newtonsoft.Json;
 using Xunit;
 
-namespace IntegrationTesting.Controllers
+namespace GreenFlux.IntegrationTest.Controllers
 {
     public class ChargeStationControllerTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {

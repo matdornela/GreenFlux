@@ -10,7 +10,7 @@ A RESTful API built with .NET Core 5, EF Core, and SQL Server
 ## Project structure
 1. `GreenFlux.API` - .NET Core 5 API 
 2. `GreenFlux.Infrastructure` - Related to Data Access Layer, EF Core, Db Context, entities, migrations, and configuration files.
-3. `GreenFlux.Business` - Responsible for dealing with business logic
+3. `GreenFlux.Domain` - Contains business rules and application logic, as well as domain models.
 4. `GreenFlux.Presentation` - Responsible for providing presentation services and object-domain mapping
 5. `GreenFlux.IntegrationTest` - Integration Testing
 6. `GreenFlux.UnitTest` - Unit Testing

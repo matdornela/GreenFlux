@@ -1,4 +1,3 @@
-using System.Linq;
 using Autofac;
 using GreenFlux.Infrastructure.AutoMapper;
 using GreenFlux.Infrastructure.DbContexts;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Linq;
 
 namespace GreenFlux.API
 {
@@ -36,7 +36,6 @@ namespace GreenFlux.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddAutoMapper(AutoMapperUtil.GetAutoMapperProfilesFromAllAssemblies().ToArray());
         }
 

@@ -5,6 +5,8 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using GreenFlux.API;
+using GreenFlux.API.Routes;
 using GreenFlux.Presentation.DTO;
 using Newtonsoft.Json;
 using Xunit;

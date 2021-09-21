@@ -11,7 +11,7 @@ A RESTful API built with .NET Core 5, EF Core, and SQL Server
 1. `GreenFlux.API` - .NET Core 5 API 
 2. `GreenFlux.Infrastructure` - Related to Data Access Layer, EF Core, Db Context, entities, migrations, and configuration files.
 3. `GreenFlux.Business` - Responsible for dealing with business logic
-4. `GreenFlux.Presentation` - Responsible for providing presentation services to the Client and object-domain mapping
+4. `GreenFlux.Presentation` - Responsible for providing presentation services and object-domain mapping
 5. `GreenFlux.IntegrationTest` - Integration Testing
 6. `GreenFlux.UnitTest` - Unit Testing
 
@@ -20,11 +20,11 @@ A RESTful API built with .NET Core 5, EF Core, and SQL Server
 Before running the API Project:
 * Set up the SQL Server Instance
 - Create the database and schema from the migration, using the following command line:
-```Update-Database ``` (Visual Studio)
-```dotnet ef database update  ``` (Visual Studio Code)
+```Update-Database ```  (Visual Studio)
+```dotnet ef database update  ```  (Visual Studio Code)
 
 After starting the API Project:
-The API URL will be directly forwarded to the OpenAPI specification built with Swagger, so it can be tested more easily through the browser.
+* The API URL will be directly forwarded to the OpenAPI specification url built with Swagger, using as default ``` /swagger ``` after url application, so it can be tested more easily through the browser.
 
 ## Software Testing (Unit & Integration)
 
